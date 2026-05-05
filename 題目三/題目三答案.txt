@@ -1,0 +1,7 @@
+SELECT c.class
+FROM score s JOIN class c ON s.name = c.name
+WHERE s.score = (
+    SELECT MAX(score)
+    FROM score
+    WHERE score < (SELECT MAX(score) FROM score)
+);

@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: asiayo-app-deploy
+  namespace: asiayo
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: asiayo
+  template:
+    metadata:
+      labels:
+        app: asiayo
+    spec:
+      containers:
+      - name: asiayo-app
+        image: xxxxxx
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+          requests:
+            cpu: "250m"
+            memory: "256Mi"
+        volumeMounts:
+        - name: asiayo-storage
+          mountPath: /usr/share/nginx/html
+      volumes:
+      - name: asiayo-storage
+        persistentVolumeClaim:
+          claimName: asiayo-pvc

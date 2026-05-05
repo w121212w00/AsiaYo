@@ -1,0 +1,33 @@
+public class TestApplication {
+	public static void main(String[] args) {
+		String file = "words.txt";
+		Pattern pattern = Pattern.compile("\\b[a-z]+\\b"); //設定正則表示式，取得純英文
+		Map<String, Integer> map = new HashMap<>();
+		try {
+			List<String> words = Files.readAllLines(Paths.get(file)); //逐行取得檔案內容
+			for(String line : words) {
+				line = line.toLowerCase(); //統一轉小寫
+				Matcher matcher = pattern.matcher(line); //取符合條件的英文字
+				while (matcher.find()) {
+	                String word = matcher.group();
+	                map.put(word, map.getOrDefault(word, 0) + 1); //計算出現次數
+	            }
+			}			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		//比較出現次數，並取得出現最多次的英文字
+		String mostWord = null;
+		int mostCount = 0;
+		for(Map.Entry<String, Integer> entry : map.entrySet()) {
+			if(entry.getValue() > mostCount) {
+				mostWord = entry.getKey();
+				mostCount = entry.getValue();
+			}
+		}
+		System.out.println(mostCount + " " + mostWord);
+		
+	}
+}
